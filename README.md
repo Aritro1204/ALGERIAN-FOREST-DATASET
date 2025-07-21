@@ -46,28 +46,96 @@ This project focuses on the **exploratory data analysis (EDA)**, **data cleaning
 - Applied scaling to numerical features to normalize the range for model compatibility.
 
 ---
+📊 Exploratory Data Analysis (EDA)
+🔍 Techniques Used:
+Histograms & Density Plots: Visualize feature distributions and detect skewness.
 
-## 📊 Exploratory Data Analysis (EDA)
+Boxplots: Identify outliers in numerical features.
 
-### 🔍 Techniques Used:
-- **Histograms & Density Plots:** To study feature distributions and skewness
-- **Boxplots:** To detect outliers
-- **Correlation Matrix & Heatmap:** To identify relationships between features
-- **Pie Chart:** To visualize class distribution
-- **Monthly Analysis Plot:** To examine seasonal fire trends
+Correlation Matrix & Heatmap: Explore relationships between variables.
 
-### 🔥 Insights:
-- Fire Weather Index (FWI), FFMC, and ISI are highly correlated with fire occurrence
-- **August** showed the highest fire activity in both regions
-- Class imbalance observed: ~56% fire, ~44% not fire
+Pie Chart: Understand the distribution of target classes (Fire vs Not Fire).
 
----
+Monthly Fire Trend Plot: Analyze fire occurrence patterns over different months.
 
-## 📦 Libraries Used
+🔥 Key Insights:
+FWI, FFMC, and ISI show strong correlation with fire occurrences.
 
-```python
+August had the highest number of fire cases in both regions.
+
+The dataset is slightly imbalanced with approximately:
+
+🔥 56% Fire
+
+❌ 44% Not Fire
+
+🧠 Model Training
+✅ Models Used:
+ Regression
+
+Ridge Regression (RidgeCV)
+
+Lasso Regression (LassoCV)
+
+
+⚙️ Preprocessing:
+Applied StandardScaler to normalize features.
+
+Training performed on X_train_scaled.
+
+📏 Evaluation Metrics:
+Accuracy
+
+F1 Score
+
+Confusion Matrix
+
+AUC-ROC Curve
+
+🔁 Cross-Validation
+📌 Purpose:
+To enhance generalization and avoid overfitting by validating model performance across multiple data splits.
+
+🔄 Techniques Applied:
+✅ 1. K-Fold Cross-Validation
+Splits data into k equal folds.
+
+Trains on k-1 folds, tests on the remaining fold.
+
+Repeats k times and averages the results.
+
+from sklearn.model_selection import cross_val_score
+
+scores = cross_val_score(model, X_train_scaled, y_train, cv=5)
+print("Cross-validation scores:", scores)
+✅ 2. RidgeCV & LassoCV
+Automatically selects the best regularization strength (alpha) using internal CV.
+
+Used for better bias-variance tradeoff in regularized regression.
+
+from sklearn.linear_model import RidgeCV
+
+alphas = [0.01, 0.1, 1, 10]
+ridge_model = RidgeCV(alphas=alphas, cv=5)
+ridge_model.fit(X_train_scaled, y_train)
+print("Best alpha:", ridge_model.alpha_)
+⚠️ Why Cross-Validation?
+📌 Avoids performance overestimation from a single train-test split.
+
+📌 Ensures robust model performance across different data segments.
+
+📌 Helps select optimal hyperparameters.
+
+📦 Libraries Used
+
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
+
 from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LogisticRegression, RidgeCV, LassoCV
+from sklearn.model_selection import train_test_split, cross_val_score
+from sklearn.metrics import classification_report, confusion_matrix, roc_auc_score
+
+
